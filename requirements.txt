@@ -1,12 +1,11 @@
-streamlit
+# requirements.txt
+
+flask
 scikit-learn
-datasets
 joblib
-torch
-transformers
+datasets
 pandas
-numpy
-streamlit
-scikit-learn
-joblib
-datasets
+tqdm
+requests
+transformers
+torch

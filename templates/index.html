@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Safety Inspector</title>
+    <style>
+      /* General Body Styling */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        background-color: #f4f7f6;
+        margin: 0;
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        min-height: 100vh; /* Full viewport height */
+      }
+
+      /* Main Container for the tool */
+      .container {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      /* Header Styling */
+      h2 {
+        color: #333;
+        margin-bottom: 25px;
+        font-size: 2em;
+      }
+
+      /* Form Styling */
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Space between form elements */
+      }
+
+      label {
+        font-weight: bold;
+        color: #555;
+        text-align: left;
+        margin-bottom: -10px; /* Adjust spacing */
+      }
+
+      input[type="text"],
+      select {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box; /* Important for padding and width */
+      }
+
+      button {
+        padding: 12px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Results Section Styling */
+      .results {
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: left;
+      }
+
+      .safe {
+        background-color: #e8f5e9; /* Light green */
+        border: 1px solid #4caf50; /* Green */
+      }
+
+      .phishing {
+        background-color: #ffebee; /* Light red */
+        border: 1px solid #f44336; /* Red */
+      }
+
+      .results h3 {
+        margin-top: 0;
+        font-size: 1.5em;
+      }
+
+      .safe h3 {
+        color: #2e7d32; /* Darker green */
+      }
+
+      .phishing h3 {
+        color: #c62828; /* Darker red */
+      }
+
+      .results ul {
+        padding-left: 20px;
+        margin-top: 15px;
+      }
+
+      .results li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .results p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>🔎 URL Safety Inspector</h2>
+      <p>Worried a link might be a scam? Paste it below to check.</p>
+      <form method="POST">
+        <div>
+          <label for="url-input">Enter URL to Inspect:</label>
+          <input
+            type="text"
+            id="url-input"
+            name="url"
+            size="60"
+            placeholder="https://example.com"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="channel-select">How did you receive this link?</label>
+          <select name="channel" id="channel-select">
+            <option value="email">Email</option>
+            <option value="sms">SMS / WhatsApp / Messenger</option>
+            <option value="clicked">I already clicked it</option>
+          </select>
+        </div>
+        <button type="submit">Check URL Now</button>
+      </form>
+
+      {% if result %} {% if 'Suspicious' in result %}
+      <div class="results phishing">
+        <h3>⚠️ {{ result }}</h3>
+        <p>
+          <strong
+            >This link shows signs of being a phishing or malicious
+            website.</strong
+          >
+          You should proceed with extreme caution.
+        </p>
+
+        <h4>Why is this dangerous?</h4>
+        <p>
+          Phishing sites are designed to trick you into giving away sensitive
+          information like passwords, credit card numbers, or personal details.
+          They often look identical to legitimate websites. Clicking could also
+          lead to malware being installed on your device.
+        </p>
+
+        <h4>Recommended Next Steps:</h4>
+        <ul>
+          <li>
+            <strong>DO NOT CLICK THE LINK.</strong> If you haven't already,
+            avoid visiting the URL.
+          </li>
+          <li>
+            <strong>REPORT THE MESSAGE.</strong> Reporting helps email and
+            social media providers block these attackers and protect others.
+            Look for a "Report Spam," "Report Phishing," or "Mark as Junk"
+            option in your application.
+          </li>
+          <li>
+            <strong>DELETE THE ORIGINAL MESSAGE.</strong> Once reported, delete
+            the email or message to avoid accidentally clicking the link later.
+          </li>
+          <li>
+            <strong>IF YOU ALREADY CLICKED:</strong>
+            <ul>
+              <li>
+                Immediately change the password for any account you may have
+                logged into.
+              </li>
+              <li>Scan your device with updated antivirus software.</li>
+              <li>
+                Monitor your bank and other sensitive accounts for suspicious
+                activity.
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <div class="results safe">
+        <h3>✅ {{ result }}</h3>
+        <p>
+          Our check did not find any immediate signs of danger. However, always
+          remain vigilant.
+        </p>
+        <h4>Stay Safe Online:</h4>
+        <ul>
+          <li>
+            Ensure the domain name looks correct and doesn't have typos (e.g.,
+            `go0gle.com` instead of `google.com`).
+          </li>
+          <li>
+            Always look for the padlock icon 🔒 and `https://` in the address
+            bar for secure sites, especially before entering personal
+            information.
+          </li>
+        </ul>
+      </div>
+      {% endif %} {% endif %}
+    </div>
+  </body>
+</html>
