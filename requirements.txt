@@ -1,11 +1,8 @@
-# requirements.txt
-
 flask
-scikit-learn
-joblib
-datasets
-pandas
-tqdm
-requests
-transformers
 torch
+transformers
+requests
+pandas
+scikit-learn
+python-dotenv
+accelerate
